@@ -1,5 +1,7 @@
 import sys
-sys.path.append('/home/usuario/Área de trabalho/leandro_alves/repositorys/nasa_images_scraper')
+import os
+my_path = os.getcwd().replace('\\', '/').replace('/libs/tests', str())
+sys.path.append(my_path)
 from libs.app.nasa_images_class import NasaMedia
 import unittest
 
@@ -10,11 +12,27 @@ class TestAPIMethods(unittest.TestCase):
         self.testing_connection()
         self.json_keys = {'object': ['href', 'data', 'links'],
                          'sub_object': ['title', 'nasa_id', 
-                         'date_created', 'media_type', 'description']}
+                         'date_created', 'media_type', 'description'],
+                         'params': ['q', 'page', 'media_type',
+                                    'year_start', 'year_end',]}
 
     def testing_parameter_setting(self):
         self.nasa_object.set_parameter('sun')
         self.assertEqual(self.nasa_object.parameter, 'sun')
+
+    def testing_primordial_link(self):
+        self.assertEqual(self.nasa_object.primordial_link, 'https://images-api.nasa.gov/search')
+
+    def testing_params_request(self):
+        self.assertEqual(type(self.nasa_object.params), dict)
+        self.assertEqual(list(self.nasa_object.params.keys()), self.json_keys['params'])
+
+    def testing_params_request_types(self):
+        self.assertEqual(type(self.nasa_object.params['q']), str)
+        self.assertEqual(type(self.nasa_object.params['page']), int)
+        self.assertEqual(type(self.nasa_object.params['media_type']), str)
+        self.assertEqual(type(self.nasa_object.params['year_start']), int)
+        self.assertEqual(type(self.nasa_object.params['year_end']), int)
 
     def testing_connection(self):
         self.testing_parameter_setting()

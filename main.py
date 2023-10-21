@@ -4,11 +4,13 @@ import argparse
 
 def main() -> None: 
     parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--command',
+                        help='search on nasa images add -i to down')
     parser.add_argument('search', 
-                        help='search on nasa images')
+                        help='search on nasa images add -i to download images')
     args = parser.parse_args()
 
-    object_ = NasaContext(args.search)
+    object_ = NasaContext(args.search, True if args.command == 'down' else False)
     object_.extracting_specific_term()
 
 
