@@ -44,9 +44,14 @@ class TestStructureMethods(unittest.TestCase):
         self.assertEqual(len(all_files), len(self.nasa_context.all_images_links))
 
     @classmethod
+    @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def tearDownClass(self) -> None:
-        os.system(f'rm ./output_nasa_images_{self.nasa_context.search_term}.csv')
-        os.system(f'rm ./nasa_images')
+        if sys.platform.startswith("win"):
+            os.system(f'del output_nasa_images_{self.nasa_context.search_term}.csv')
+            os.system('rmdir /s /Q nasa_images')
+        else:
+            os.system(f'rm ./output_nasa_images_{self.nasa_context.search_term}.csv')
+            os.system('rm -r ./nasa_images')
 
 if __name__ == '__main__':
     unittest.main()
